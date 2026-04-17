@@ -1,0 +1,10 @@
+#!/bin/bash
+PLIST="$HOME/Library/LaunchAgents/com.bradleyhawkins.track-music.plist"
+LABEL="com.bradleyhawkins.track-music"
+
+case "$1" in
+  start)   launchctl load "$PLIST" && echo "Music tracker started" ;;
+  stop)    launchctl unload "$PLIST" && echo "Music tracker stopped" ;;
+  status)  launchctl list | grep "$LABEL" > /dev/null && echo "Running" || echo "Stopped" ;;
+  *)       echo "Usage: music-tracker {start|stop|status}" ;;
+esac
