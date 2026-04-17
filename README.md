@@ -6,10 +6,21 @@ Automatically tracks songs played in Apple Music while working and logs them to 
 
 ### How it works
 
-- A background process polls Apple Music every 60 seconds
-- New songs are logged to `~/Storage/notes/sessions/YYYY-MM-DD/music.jsonl`
-- Session notes automatically include the day's listening history
-- Run `weekly-playlist` at any time to see the week's songs
+A macOS launchd agent runs `track-music.py` automatically at login and keeps it running in the background. Every 60 seconds the script uses AppleScript to ask Music.app what's currently playing. If the song has changed since the last check, it appends a new entry to that day's log file — so each song is only recorded once no matter how long it plays.
+
+Logs are stored as newline-delimited JSON (one entry per line) at:
+```
+~/Storage/notes/sessions/YYYY-MM-DD/music.jsonl
+```
+
+Each entry looks like:
+```json
+{"title": "Alabama", "artist": "Neil Young", "album": "Harvest", "first_heard_at": "2026-04-17T20:13:22+00:00"}
+```
+
+At the end of the week, `weekly-playlist` reads all the daily logs from Monday to today, deduplicates across days, and prints a clean numbered playlist you can share with anyone.
+
+If you use Claude Code's `/session-notes` skill, it will also automatically pull today's log and include a **Listening** section in your notes.
 
 ### Setup (new machine)
 
