@@ -1,8 +1,4 @@
-# dotfiles
-
-Personal scripts and configs for my Mac setup.
-
----
+# Workday Music Tracker
 
 ## Music Tracker
 
@@ -18,8 +14,8 @@ Automatically tracks songs played in Apple Music while working and logs them to 
 ### Setup (new machine)
 
 ```bash
-git clone https://github.com/hawbra56/dotfiles
-cd dotfiles
+git clone https://github.com/hawbra56/workday-music-tracker
+cd workday-music-tracker
 ./install.sh
 ```
 
