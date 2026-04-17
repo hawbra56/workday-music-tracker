@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+import json
+from datetime import datetime, timedelta
+from pathlib import Path
+
+LOG_BASE = Path.home() / "Storage/notes/sessions"
+
+# Get Monday through today
+today = datetime.now().date()
+monday = today - timedelta(days=today.weekday())
+days = [monday + timedelta(days=i) for i in range((today - monday).days + 1)]
+
+seen = set()
+playlist = []
+
+for day in days:
+    log_file = LOG_BASE / day.strftime("%Y-%m-%d") / "music.jsonl"
+    if not log_file.exists():
+        continue
+    with open(log_file) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            entry = json.loads(line)
+            key = (entry["title"].lower(), entry["artist"].lower())
+            if key not in seen:
+                seen.add(key)
+                playlist.append(entry)
+
+if not playlist:
+    print("No songs tracked this week.")
+else:
+    print(f"🎵 Weekly Playlist — {monday.strftime('%b %d')} to {today.strftime('%b %d, %Y')}")
+    print(f"{'─' * 50}")
+    for i, track in enumerate(playlist, 1):
+        print(f"{i:>3}. {track['title']} — {track['artist']}")
+    print(f"{'─' * 50}")
+    print(f"{len(playlist)} songs")
